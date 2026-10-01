@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversário, Bida!</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f051d 0%, #29104a 50%, #150728 100%);
+            color: #f3e8ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.4)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 35px rgba(216, 180, 254, 0.8)); }
+        }
+
+        .animate-pulse-custom {
+            animation: pulse-slow 2s infinite ease-in-out;
+        }
+
+        .screen-transition {
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 relative">
+
+    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+        <div class="absolute top-1/4 left-10 w-72 h-72 bg-purple-600 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-10 w-96 h-96 bg-fuchsia-600 rounded-full blur-3xl"></div>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="https://p.scdn.co/mp3-preview/b689a1c2227d885a08332158862908f51abdc030?cid=2503923985454687b32252a129ef99fc" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
+    <!-- Floating Audio Control Top Right -->
+    <div class="absolute top-4 right-4 z-50">
+        <button onclick="toggleMusic()" class="flex items-center gap-2 bg-[#2a124d]/80 hover:bg-[#3b196b] border border-purple-500/30 backdrop-blur-md px-3.5 py-2 rounded-full text-xs font-medium text-purple-200 shadow-xl transition-all active:scale-95">
+            <span id="music-icon" class="text-sm">🎵</span>
+            <span id="music-text">As It Was</span>
+        </button>
+    </div>
+
+    <div class="w-full max-w-md mx-auto z-10 flex flex-col items-center justify-center min-h-[90vh]">
+
+        <!-- STAGE 1: Welcome / Me Toca Screen -->
+        <div id="stage-1" class="screen-transition opacity-100 transform translate-y-0 flex flex-col items-center justify-center text-center w-full">
+            <div class="my-auto py-12 flex flex-col items-center">
+                <!-- Pulsating Purple Heart Button -->
+                <div onclick="triggerExperience()" class="animate-pulse-custom cursor-pointer relative group flex items-center justify-center w-48 h-48 select-none">
+                    <svg class="w-full h-full text-purple-500 drop-shadow-[0_0_25px_rgba(168,85,247,0.6)]" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="text-white font-semibold text-lg drop-shadow-md flex items-center gap-1">
+                            Me toca <span class="text-xl">💜</span>
+                        </span>
+                    </div>
+                </div>
+                <p class="text-purple-300 text-sm mt-6 font-light animate-pulse">Toque no coração para começar</p>
+            </div>
+
+            <!-- Bottom navigation shortcut -->
+            <div class="w-full flex justify-end mt-auto pt-8">
+                <button onclick="goToDetailsDirect()" class="px-7 py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-medium rounded-full shadow-lg shadow-purple-900/40 transform active:scale-95 transition-all duration-200">
+                    Detalhes
+                </button>
+            </div>
+        </div>
+
+        <!-- STAGE 2: Main Birthday Message Card -->
+        <div id="stage-2" class="screen-transition hidden opacity-0 transform translate-y-6 w-full">
+            <div class="bg-[#1e0c38]/90 backdrop-blur-xl border border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+                <!-- Card Header -->
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-wide text-purple-100 font-['Sacramento'] text-4xl mb-1">
+                        Feliz Aniversário, Bida!
+                    </h1>
+                    <p class="text-purple-300 text-sm mt-1">Bem-vinda aos 18 anos! O dia é todinho seu. ✨</p>
+                </div>
+
+                <!-- Message Body -->
+                <div class="space-y-4 text-purple-200/90 text-sm sm:text-base leading-relaxed text-center font-light">
+                    <p>
+                        Chegar aos 18 anos é um marco lindo e muito especial. Mesmo com a vida tendo tomado rumos diferentes, eu jamais poderia deixar de estar presente, mesmo que de longe, em uma data tão importante para você.
+                    </p>
+                    <p>
+                        Quero te desejar um aniversário espetacular! Que essa nova fase venha repleta de grandes conquistas, liberdade, sonhos realizados e muitos motivos para sorrir. Você merece o mundo.
+                    </p>
+                    <p class="font-medium text-purple-100 pt-2">
+                        Curta cada segundo dessa nova etapa! Parabéns pelos 18 anos, Bida! 🥳💜
+                    </p>
+                </div>
+
+                <!-- Action Button -->
+                <div class="mt-8 flex justify-end">
+                    <button onclick="goToDetails()" class="px-7 py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-medium rounded-full shadow-lg shadow-purple-900/40 transform active:scale-95 transition-all duration-200">
+                        Detalhes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 3: Details / Closing Note Card -->
+        <div id="stage-3" class="screen-transition hidden opacity-0 transform translate-y-6 w-full">
+            <div class="bg-[#1e0c38]/90 backdrop-blur-xl border border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+                <!-- Header -->
+                <div class="text-center mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold tracking-wide text-purple-100">Um pequeno detalhe...</h2>
+                    <div class="text-3xl mt-2">💌</div>
+                </div>
+
+                <!-- Body -->
+                <div class="space-y-4 text-purple-200/90 text-sm sm:text-base leading-relaxed text-center font-light">
+                    <p>
+                        Lembro com muito carinho da pessoa incrível que você é. Ver você crescer e dar esse passo tão importante para a maioridade me enche de alegria.
+                    </p>
+                    <p>
+                        Que esse novo ciclo traga muita luz, sabedoria e felicidade transbordando. Tenha um dia inesquecível!
+                    </p>
+                    <p class="font-medium text-purple-300 pt-2">
+                        Você merece coisas maravilhosas. 🥂💜
+                    </p>
+                </div>
+
+                <!-- Back Button -->
+                <div class="mt-8 flex justify-center">
+                    <button onclick="goBack()" class="w-full sm:w-auto px-8 py-3 bg-[#2d1452] hover:bg-[#3c1b6e] text-purple-200 font-medium rounded-full shadow-lg border border-purple-500/30 transform active:scale-95 transition-all duration-200">
+                        Voltar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let musicPlaying = false;
+        let previousStage = 'stage-2';
+
+        // Background audio toggle logic
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const musicText = document.getElementById('music-text');
+            const musicIcon = document.getElementById('music-icon');
+
+            if (musicPlaying) {
+                audio.pause();
+                musicPlaying = false;
+                musicText.innerText = 'As It Was';
+                musicIcon.innerText = '🎵';
+            } else {
+                audio.play().then(() => {
+                    musicPlaying = true;
+                    musicText.innerText = 'Pausar';
+                    musicIcon.innerText = '🎶';
+                }).catch(error => {
+                    console.log("Reprodução automática restrita pelo navegador.");
+                });
+            }
+        }
+
+        // Trigger confetti burst & move from stage 1 to stage 2
+        function triggerExperience() {
+            const audio = document.getElementById('bg-music');
+            if (!musicPlaying) {
+                audio.play().then(() => {
+                    musicPlaying = true;
+                    document.getElementById('music-text').innerText = 'Pausar';
+                    document.getElementById('music-icon').innerText = '🎶';
+                }).catch(e => {});
+            }
+
+            // Purple & Gold confetti celebratory burst
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#c084fc', '#9333ea', '#e9d5ff', '#fbbf24', '#d946ef']
+            });
+
+            previousStage = 'stage-2';
+            switchScreens('stage-1', 'stage-2');
+        }
+
+        // Navigate directly to details from stage 1
+        function goToDetailsDirect() {
+            previousStage = 'stage-1';
+            switchScreens('stage-1', 'stage-3');
+        }
+
+        // Navigate to details from stage 2
+        function goToDetails() {
+            previousStage = 'stage-2';
+            switchScreens('stage-2', 'stage-3');
+        }
+
+        // Return from stage 3 back to previous stage
+        function goBack() {
+            if (previousStage === 'stage-1') {
+                switchScreens('stage-3', 'stage-1');
+            } else {
+                switchScreens('stage-3', 'stage-2');
+            }
+        }
+
+        // Smooth transition utility
+        function switchScreens(currentId, nextId) {
+            const current = document.getElementById(currentId);
+            const next = document.getElementById(nextId);
+
+            current.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                current.classList.add('hidden');
+                next.classList.remove('hidden');
+                setTimeout(() => {
+                    next.classList.remove('opacity-0', 'scale-95', 'translate-y-6');
+                    next.classList.add('opacity-100', 'scale-100', 'translate-y-0');
+                }, 30);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
